@@ -16,6 +16,9 @@ TABLES = {
                         }
 };
 
+ROW = {'recipe' : 'Shepherd\'s Pie', 'ingredient' : 'Minced Meat'};
+
+
 CONNECTION_DETAILS = {
     'host' : HOST,
     'port' : PORT,

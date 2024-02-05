@@ -21,9 +21,14 @@ try:
     for table in TABLES:
         create_table(connection, DATABASE, table, TABLES[table]);
 except mysql.connector.Error as err:
-        print("Failed: {}".format(err));
+    print("Failed: {}".format(err));
 
 # populate table
+try:
+    for table in TABLES:
+        add_row_to_table(connection, DATABASE, table, TABLES[table], ROW);
+except mysql.connector.Error as err:
+    print("Failed: {}".format(err));
 
 
 connection.close()
