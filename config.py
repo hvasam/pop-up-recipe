@@ -7,9 +7,11 @@ USERNAME = 'root';
 PASSWORD = 'my-secret-pw';
 
 
-DATABASE = 'test';
+DEFAULT_DATABASE = 'test';
 
 DEFAULT_TABLE = 'cookbook';
+DEFAULT_TABLE_PRIMARY_KEY = '(recipe, ingredient)';
+
 DEFAULT_RECIPES_FILE_PATH = './recipes.txt';
 
 

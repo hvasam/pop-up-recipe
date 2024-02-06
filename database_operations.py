@@ -109,4 +109,35 @@ def add_row_to_table(database_connection, cursor, database_name, table_name, tab
     except mysql.connector.Error as err:
         print("Failed to add row: {} to table: {}".format(row, table_name));
         print("Failed with error: {}".format(err));
+
+
+
+
+def add_primary_key_to_table(database_connection, database_name, table_name, primary_key):
+
+    if database_connection is None:
+        return;
+
+    if database_name is None or database_name == "":
+        return;
     
+    if table_name is None or table_name == "":
+        return;
+    
+    if primary_key is None or primary_key == "":
+        return;
+    
+    try:
+        database_connection.database = database_name
+        cursor = database_connection.cursor()
+
+        execution_statement = "ALTER TABLE {} ADD PRIMARY KEY {}".format(table_name, primary_key);
+        cursor.execute(execution_statement);
+        cursor.close();
+
+        print("Successfully added primary key: {} to table: {}".format(primary_key, table_name));
+    except mysql.connector.Error as err:
+        print("Failed to add primary key: {} to table: {}".format(primary_key, table_name));
+        print("Failed with error: {}".format(err));
+
+
