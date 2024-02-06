@@ -21,7 +21,7 @@ TABLES = {
                         }
 };
 
-ROW = {'recipe' : 'Shepherd\'s Pie', 'ingredient' : 'Minced Meat'};
+SAMPLE_ROW = {'recipe' : 'Shepherd\'s Pie', 'ingredient' : 'Minced Meat'};
 
 
 CONNECTION_DETAILS = {

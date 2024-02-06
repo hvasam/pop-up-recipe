@@ -5,12 +5,16 @@
 # Sample File Format:
 ###################################### BEGINNING OF FILE ######################################
 # chicken pot pie, butter, onion, all-purpose flour, chicken broth, milk, chicken, peas, carrots, potatoes, double-crust pie pastry
+# lasagna, sweet italian sausage, lean ground beef, onion, cloves garlic, crushed tomatoes, canned tomato sauce, tomato paste, fresh parsley, dried basil leaves, italian seasoning, fennel seeds, lasagna noodles, ricotta cheese, mozzarella cheese, parmesan cheese
+# cajun seafood pasta, dry fettuccine pasta, heavy whipping cream, green onions, parsley, fresh basil, fresh thyme, red pepper flakes, white pepper, shrimp, scallops, swiss cheese, parmesan cheese
 ######################################     END OF FILE   ######################################
 
 import csv
 from database_operations import add_row_to_table
 
-def upload_recipes_csv_to_database(database_connection, database_name, table_name, table_spec, path_to_file):
+# database_connection is a MySQLConnection Class object
+# table_spec is a dictionary that maps column names and SQL data types
+def upload_recipes_csv_to_database(database_connection, cursor, database_name, table_name, table_spec, path_to_file):
 
     if database_connection is None:
         return;
@@ -28,14 +32,14 @@ def upload_recipes_csv_to_database(database_connection, database_name, table_nam
             if number_of_items < 2:
                 continue;
 
-            print("The current row is: {}".format(row));
+            # print("The current row is: {}".format(row));
             recipe_name = row[0];
             for index in range(number_of_items):
-                print("The current index is: {}".format(index));
+                # print("The current index is: {}".format(index));
                 if index == 0:
                     continue;
                 else:
-                    print("The row being added to the database is: {} : {}".format(recipe_name, row[index]));
+                    # print("The row being added to the database is: {} : {}".format(recipe_name, row[index]));
                     current_row = {'recipe' : row[0], 
                                    'ingredient' : row[index]};
-                    add_row_to_table(database_connection, database_name, table_name, table_spec, current_row);
+                    add_row_to_table(database_connection, cursor, database_name, table_name, table_spec, current_row);

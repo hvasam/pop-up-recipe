@@ -26,7 +26,11 @@ except mysql.connector.Error as err:
 
 # populate tables
 try:
-    upload_recipes_csv_to_database(connection, DATABASE, DEFAULT_TABLE, TABLES[DEFAULT_TABLE], DEFAULT_RECIPES_FILE_PATH)
+    cursor = connection.cursor();
+    upload_recipes_csv_to_database(connection, cursor, DATABASE, DEFAULT_TABLE, TABLES[DEFAULT_TABLE], DEFAULT_RECIPES_FILE_PATH);
+    # Insert statements must be committed
+    connection.commit();
+    cursor.close();
 except mysql.connector.Error as err:
     print("Failed: {}".format(err));
 

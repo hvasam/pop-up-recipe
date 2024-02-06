@@ -72,7 +72,7 @@ def get_column_names(row):
 # database_connection is a MySQLConnection Class object
 # table_spec is a dictionary that maps column names and SQL data types
 # row paramater is a dictionary mapping column names to values
-def add_row_to_table(database_connection, database_name, table_name, table_spec, row):
+def add_row_to_table(database_connection, cursor, database_name, table_name, table_spec, row):
     
     if database_connection is None:
         return;
@@ -88,7 +88,6 @@ def add_row_to_table(database_connection, database_name, table_name, table_spec,
 
     try:
         database_connection.database = database_name;
-        cursor = database_connection.cursor();
 
         columns = get_column_names(row);
         values = "";
@@ -98,19 +97,13 @@ def add_row_to_table(database_connection, database_name, table_name, table_spec,
 
         values = values[:-1];
 
-        print("Executing following query:");
-        print("INSERT INTO {} ({}) VALUES ({})".format(table_name, columns, values));
+        # print("Executing following query:");
+        # print("INSERT INTO {} ({}) VALUES ({})".format(table_name, columns, values));
 
         execution_statement = "INSERT INTO {} ({}) VALUES ({})".format(table_name, columns, values);
 
-        print("The row values are: {}".format(list(row.values())));
+        # print("The row values are: {}".format(list(row.values())));
         cursor.execute(execution_statement, list(row.values()));
-
-        # Insert statements must be committed
-        database_connection.commit();
-
-        
-        cursor.close();
 
         print("Successfully added row: {}".format(row));
     except mysql.connector.Error as err:
