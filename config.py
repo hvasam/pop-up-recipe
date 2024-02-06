@@ -6,7 +6,12 @@ PORT = '3306';
 USERNAME = 'root';
 PASSWORD = 'my-secret-pw';
 
+
 DATABASE = 'test';
+
+DEFAULT_TABLE = 'cookbook';
+DEFAULT_RECIPES_FILE_PATH = './recipes.txt';
+
 
 # this dictionary contains a mapping between table names and a dictionary consisting of a mapping between columns names and column data types. 
 TABLES = {

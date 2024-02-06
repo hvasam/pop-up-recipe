@@ -1,5 +1,6 @@
 import mysql.connector
 
+# database_connection is a MySQLConnection Class object
 def create_database(database_connection, database_name):
     
     if database_connection is None:
@@ -19,8 +20,8 @@ def create_database(database_connection, database_name):
         print("Failed with error: {}".format(err));
 
 
-
-
+# database_connection is a MySQLConnection Class object
+# table_spec is a dictionary that maps column names and SQL data types
 def create_table(database_connection, database_name, table_name, table_spec):
     
     if database_connection is None:
@@ -68,7 +69,9 @@ def get_column_names(row):
     columns = columns[:-1];
     return columns
 
-# 
+# database_connection is a MySQLConnection Class object
+# table_spec is a dictionary that maps column names and SQL data types
+# row paramater is a dictionary mapping column names to values
 def add_row_to_table(database_connection, database_name, table_name, table_spec, row):
     
     if database_connection is None:
@@ -82,7 +85,7 @@ def add_row_to_table(database_connection, database_name, table_name, table_spec,
 
     if row is None or len(row) != len(table_spec):
         return;
-        
+
     try:
         database_connection.database = database_name;
         cursor = database_connection.cursor();
