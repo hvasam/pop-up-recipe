@@ -192,8 +192,8 @@ def get_rows_from_database(database_connection, database_name, table_name, desir
 
         values = tuple(column_ids_and_values.values());
 
-        print("The values used in the execution statement are: {}".format(values));
-        print("The execution statement is: {}".format(execution_statement));
+        #print("The values used in the execution statement are: {}".format(values));
+        #print("The execution statement is: {}".format(execution_statement));
 
         cursor.execute(execution_statement, values);
         

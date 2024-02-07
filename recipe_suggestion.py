@@ -141,7 +141,7 @@ def get_missing_ingredients_needed_for_recipe(database_connection, recipe, list_
 
     concatenated_string_list = "'" + "', '".join(map(str, list_of_ingredients)) + "'";
 
-    print("The concatenated string list is: {}".format(concatenated_string_list));
+    # print("The concatenated string list is: {}".format(concatenated_string_list));
     # select ingredient from test.cookbook where recipe = 'shepherd\'s pie' and ingredient not in ("butter") ;
     execution_statement = "SELECT DISTINCT {} FROM {} WHERE {} = %s AND {} NOT IN ({})".format(INGREDIENT_COLUMN_ID,
                                                                                                DEFAULT_TABLE,
@@ -194,7 +194,6 @@ all_recipes = get_rows_from_database(connection,
 ingredient_list1 = ["salt", "lime juice", "red onion", "Mary", "Larry", "tomatoes", "fresh cilantro", "garlic", "toothbrush"];
 ingredient_list2 = ["egg noodles", "broccoli", "bell peppers", "carrots", "snow peas", "ginger", "garlic"];
 ingredient_list3 = ["Mary", "Luke", "John", "garlic"];
-print("The type of all_recipes is: {}".format(type(all_recipes)));
 
 get_recipe_and_ingredients_needed_given_cart(connection, DEFAULT_TABLE, ingredient_list1, all_recipes);
 
