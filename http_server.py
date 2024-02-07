@@ -8,10 +8,6 @@ import mysql.connector
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-    return {"message": "Hello, world!"}
-
 @app.get("/suggest_a_recipe/")
 def get_items(item_ids: List[str] = Query(...)):
 

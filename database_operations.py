@@ -151,8 +151,7 @@ def add_primary_key_to_table(database_connection, database_name, table_name, pri
 def generate_where_clause(column_ids_and_values, logical_operator="AND", negate=False):
     if column_ids_and_values is None or column_ids_and_values  == {}:
         return "";
-    
-
+        
     where_clause = "WHERE (";
 
     if negate == True:
