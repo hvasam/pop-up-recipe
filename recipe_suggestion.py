@@ -8,7 +8,7 @@ CLOSENESS_NUMBER = 4;
 
 ## ingredient must be a string
 ## returned recipes are in the form of: [(recipe1,).(recipe2,),...]
-def get_recipes_that_contain(ingredient, recipe_list):
+def get_recipes_that_contain(ingredient, recipe_list, database_connection):
     if ingredient is None or ingredient == "":
         return [];
     
@@ -22,14 +22,14 @@ def get_recipes_that_contain(ingredient, recipe_list):
     for recipe in recipe_list:
         query_condition[RECIPE_COLUMN_ID] = recipe[0];
 
-        cursor = get_rows_from_database(connection, DEFAULT_DATABASE, DEFAULT_TABLE, RECIPE_COLUMN_ID, query_condition, "AND");
+        cursor = get_rows_from_database(database_connection, DEFAULT_DATABASE, DEFAULT_TABLE, RECIPE_COLUMN_ID, query_condition, "AND");
 
         if cursor is None:
             continue;
     
         recipe_list_subset += cursor.fetchall();
 
-    print("The recipes that use the ingredient: {} given: {} are: {}".format(ingredient, recipe_list, recipe_list_subset));
+    # print("The recipes that use the ingredient: {} given: {} are: {}".format(ingredient, recipe_list, recipe_list_subset));
     return recipe_list_subset;
 
 ## ingredient must be a string
@@ -69,7 +69,7 @@ def get_recipes_that_do_not_contain(ingredient, recipe_list, database_connection
 
     cursor.close();
 
-    print("The recipes that do not use the ingredient: {} given: {} are: {}".format(ingredient, recipe_list, recipe_list_subset));
+    #print("The recipes that do not use the ingredient: {} given: {} are: {}".format(ingredient, recipe_list, recipe_list_subset));
     return recipe_list_subset;
 
 
@@ -83,7 +83,7 @@ def get_recipe_that_requires_less_than_max_ingredients(database_connection, tabl
     for recipe in set_of_recipes:
         recipe_name = recipe[0];
         execution_statement = "SELECT {}, count(*) AS count FROM {} WHERE {} = %s GROUP BY {} HAVING count < {}".format(RECIPE_COLUMN_ID, table_name, RECIPE_COLUMN_ID, RECIPE_COLUMN_ID, max_ingredients);
-        print(execution_statement % recipe_name);
+        # print(execution_statement % recipe_name);
 
         cursor.execute(execution_statement, (recipe_name,));
         satisfactory_recipes = cursor.fetchall();
@@ -110,14 +110,13 @@ def find_closest_recipe_given_ingredients(database_connection, table_name, ingre
         found_recipe[0] = get_recipe_that_requires_less_than_max_ingredients(database_connection, table_name, total_ingredient_matches + CLOSENESS_NUMBER, list_of_recipes);
         return;
     
-    print("We will recurse");
     find_closest_recipe_given_ingredients(database_connection, 
                                           table_name, 
                                           ingredient_list, 
                                           (ingredient_list_index + 1), 
                                           total_number_of_ingredients,
                                           (total_ingredient_matches + 1), 
-                                          get_recipes_that_contain(ingredient_list[ingredient_list_index], list_of_recipes), # this function needs to be able to recursively find set of recipes 
+                                          get_recipes_that_contain(ingredient_list[ingredient_list_index], list_of_recipes, database_connection), # this function needs to be able to recursively find set of recipes 
                                           found_recipe);
     find_closest_recipe_given_ingredients(database_connection, 
                                           table_name, 
@@ -125,7 +124,7 @@ def find_closest_recipe_given_ingredients(database_connection, table_name, ingre
                                           (ingredient_list_index + 1), 
                                           total_number_of_ingredients, 
                                           total_ingredient_matches,
-                                          get_recipes_that_do_not_contain(ingredient_list[ingredient_list_index], list_of_recipes, connection), # this function needs to be able to recursively find set of recipes 
+                                          get_recipes_that_do_not_contain(ingredient_list[ingredient_list_index], list_of_recipes, database_connection), # this function needs to be able to recursively find set of recipes 
                                           found_recipe);
 
 
@@ -163,24 +162,24 @@ def get_missing_ingredients_needed_for_recipe(database_connection, recipe, list_
 # cart is a list of items (i.e ingredients) from the customer shopping cart. This list should only contain valid items (produce, meat, dairy, bread, spices etc...).
 def get_recipe_and_ingredients_needed_given_cart(database_connection, table_name, cart, recipe_catalog):
     closest_recipe = [""];
-    find_closest_recipe_given_ingredients(connection,
-                                        table_name,
-                                        cart,
-                                        ingredient_list_index=0,
-                                        total_number_of_ingredients=len(cart),
-                                        total_ingredient_matches=0,
-                                        list_of_recipes=recipe_catalog,
-                                        found_recipe=closest_recipe);
+    find_closest_recipe_given_ingredients(database_connection,
+                                          table_name,
+                                          cart,
+                                          ingredient_list_index=0,
+                                          total_number_of_ingredients=len(cart),
+                                          total_ingredient_matches=0,
+                                          list_of_recipes=recipe_catalog,
+                                          found_recipe=closest_recipe);
 
     print("The closest recipe is: {}".format(closest_recipe[0]));
-    missing_ingredients = get_missing_ingredients_needed_for_recipe(connection, closest_recipe[0], cart);
+    missing_ingredients = get_missing_ingredients_needed_for_recipe(database_connection, closest_recipe[0], cart);
     print("The missing ingredients are: {}".format(missing_ingredients));
-    return closest_recipe[0], 
+    return closest_recipe[0], missing_ingredients, 
 
 
 
 
-
+'''
 # get connection
 connection = get_connection_for_db(CONNECTION_DETAILS);
 print("Connection was successful");
@@ -196,6 +195,10 @@ ingredient_list2 = ["egg noodles", "broccoli", "bell peppers", "carrots", "snow 
 ingredient_list3 = ["Mary", "Luke", "John", "garlic"];
 
 get_recipe_and_ingredients_needed_given_cart(connection, DEFAULT_TABLE, ingredient_list1, all_recipes);
+get_recipe_and_ingredients_needed_given_cart(connection, DEFAULT_TABLE, ingredient_list2, all_recipes);
+get_recipe_and_ingredients_needed_given_cart(connection, DEFAULT_TABLE, ingredient_list3, all_recipes);
+
 
 # close connection
 connection.close();
+'''
