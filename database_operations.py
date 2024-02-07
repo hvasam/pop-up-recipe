@@ -101,9 +101,13 @@ def add_row_to_table(database_connection, cursor, database_name, table_name, tab
         # print("INSERT INTO {} ({}) VALUES ({})".format(table_name, columns, values));
 
         execution_statement = "INSERT INTO {} ({}) VALUES ({})".format(table_name, columns, values);
+        values_list = list(row.values());
+
+        print("The execution statement is: {}".format(execution_statement));
+        print("The above statement uses the following values: {}".format(values_list))
 
         # print("The row values are: {}".format(list(row.values())));
-        cursor.execute(execution_statement, list(row.values()));
+        cursor.execute(execution_statement, values_list);
 
         print("Successfully added row: {}".format(row));
     except mysql.connector.Error as err:
@@ -141,3 +145,59 @@ def add_primary_key_to_table(database_connection, database_name, table_name, pri
         print("Failed with error: {}".format(err));
 
 
+
+
+
+def generate_where_clause(column_ids_and_values, logical_operator="AND", negate=False):
+    if column_ids_and_values is None or column_ids_and_values  == {}:
+        return "";
+    
+
+    where_clause = "WHERE (";
+
+    if negate == True:
+        where_clause = "WHERE NOT (";
+    
+    for column_id,value in column_ids_and_values.items():
+        where_clause += "{} = %s {} ".format(column_id, logical_operator);
+    where_clause = where_clause[:-4];
+    where_clause += ")";
+
+    return where_clause;
+
+## desired_columns parameter is a string that contains the desired columns (comma delimited)
+## column_ids_and_values parameter is a dictionary of column ids and corresponding values to be used in the where clause
+def get_rows_from_database(database_connection, database_name, table_name, desired_columns, column_ids_and_values, logical_operator="AND", negate=False):
+
+    if database_connection is None:
+        return;
+
+    if database_name is None or database_name == "":
+        return;
+    
+    if table_name is None or table_name == "":
+        return;
+
+    try:
+        database_connection.database = database_name;
+        cursor = database_connection.cursor();
+
+        where_clause = "";
+        if negate == True:
+            where_clause = generate_where_clause(column_ids_and_values, logical_operator, True);
+        else:
+            where_clause = generate_where_clause(column_ids_and_values, logical_operator, False);
+        
+        execution_statement = "SELECT DISTINCT {} FROM {} {}".format(desired_columns, table_name, where_clause);
+
+        values = tuple(column_ids_and_values.values());
+
+        print("The values used in the execution statement are: {}".format(values));
+        print("The execution statement is: {}".format(execution_statement));
+
+        cursor.execute(execution_statement, values);
+        
+        return cursor;
+    except mysql.connector.Error as err:
+        print("Failed to query column ids and values: {} from table: {}".format(column_ids_and_values, table_name));
+        print("Failed with error: {}".format(err));

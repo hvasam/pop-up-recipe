@@ -40,6 +40,6 @@ def upload_recipes_csv_to_database(database_connection, cursor, database_name, t
                     continue;
                 else:
                     # print("The row being added to the database is: {} : {}".format(recipe_name, row[index]));
-                    current_row = {'recipe' : row[0], 
-                                   'ingredient' : row[index]};
+                    current_row = {'recipe' : row[0].lower().strip(), 
+                                   'ingredient' : row[index].lower().strip()};
                     add_row_to_table(database_connection, cursor, database_name, table_name, table_spec, current_row);
