@@ -174,31 +174,4 @@ def get_recipe_and_ingredients_needed_given_cart(database_connection, table_name
     print("The closest recipe is: {}".format(closest_recipe[0]));
     missing_ingredients = get_missing_ingredients_needed_for_recipe(database_connection, closest_recipe[0], cart);
     print("The missing ingredients are: {}".format(missing_ingredients));
-    return closest_recipe[0], missing_ingredients, 
-
-
-
-
-'''
-# get connection
-connection = get_connection_for_db(CONNECTION_DETAILS);
-print("Connection was successful");
-
-all_recipes = get_rows_from_database(connection,
-                                     DEFAULT_DATABASE,
-                                     DEFAULT_TABLE,
-                                     RECIPE_COLUMN_ID,
-                                     {}).fetchall();
-
-ingredient_list1 = ["salt", "lime juice", "red onion", "Mary", "Larry", "tomatoes", "fresh cilantro", "garlic", "toothbrush"];
-ingredient_list2 = ["egg noodles", "broccoli", "bell peppers", "carrots", "snow peas", "ginger", "garlic"];
-ingredient_list3 = ["Mary", "Luke", "John", "garlic"];
-
-get_recipe_and_ingredients_needed_given_cart(connection, DEFAULT_TABLE, ingredient_list1, all_recipes);
-get_recipe_and_ingredients_needed_given_cart(connection, DEFAULT_TABLE, ingredient_list2, all_recipes);
-get_recipe_and_ingredients_needed_given_cart(connection, DEFAULT_TABLE, ingredient_list3, all_recipes);
-
-
-# close connection
-connection.close();
-'''
+    return closest_recipe[0], missing_ingredients

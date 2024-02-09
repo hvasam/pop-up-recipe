@@ -14,7 +14,7 @@ from database_operations import add_row_to_table
 
 # database_connection is a MySQLConnection Class object
 # table_spec is a dictionary that maps column names and SQL data types
-def upload_recipes_csv_to_database(database_connection, cursor, database_name, table_name, table_spec, path_to_file):
+def upload_recipes_csv_to_database(database_connection, cursor, database_name, table_name, table_spec, path_to_recipes_file):
 
     if database_connection is None:
         return;
@@ -25,7 +25,7 @@ def upload_recipes_csv_to_database(database_connection, cursor, database_name, t
     if table_name == "" or table_spec is None or len(table_spec) == 0:
         return;
 
-    with open(path_to_file, newline='') as f:
+    with open(path_to_recipes_file, newline='') as f:
         reader = csv.reader(f);
         for row in reader:
             number_of_items = len(row);
