@@ -1,0 +1,21 @@
+name: learn-github-actions
+run-name: ${{ github.actor }} is learning GitHub Actions
+on: [push]
+  push:
+    branches:
+      - master
+
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      name: Checkout code # default values seem to do the trick
+      - uses: actions/checkout@v4
+    steps:
+      - name: Extract version number
+        run: echo "VERSION=$(grep -oP '^current_version = \K.*' .bumpversion.cfg)" >> $GITHUB_ENV
+    steps:
+      - name: Build Docker image
+        run: |
+          docker build -t ghcr.io/hvasam/pop-up-recipe:${{ env.VERSION }} .
+          docker push ghcr.io/hvasam/pop-up-recipe:${{ env.VERSION }}
