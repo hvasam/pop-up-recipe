@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code # default values seem to do the trick
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
       - name: Extract version number
         run: echo "VERSION=$(grep -oP '^current_version = \K.*' .bumpversion.cfg)" >> $GITHUB_ENV
       - name: Build Docker image
