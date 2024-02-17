@@ -9,7 +9,7 @@ jobs:
   check-bats-version:
     runs-on: ubuntu-latest
     steps:
-      name: Checkout code # default values seem to do the trick
+      - name: Checkout code # default values seem to do the trick
       - uses: actions/checkout@v4
     steps:
       - name: Extract version number
