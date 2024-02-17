@@ -15,5 +15,6 @@ jobs:
         run: echo "VERSION=$(grep -oP '^current_version = \K.*' .bumpversion.cfg)" >> $GITHUB_ENV
       - name: Build Docker image
         run: |
+          docker login ghcr.io -u hvasam409@gmail.com -p ${{ secrets.DOCKER_REPO_TOKEN }}
           docker build -t ghcr.io/hvasam/pop-up-recipe:${{ env.VERSION }} .
           docker push ghcr.io/hvasam/pop-up-recipe:${{ env.VERSION }}
